@@ -7,18 +7,23 @@ A full-stack web application built on the **MERN Stack** (MongoDB, Express, Reac
 ## Index ✏️
 
 - [Library Management System 📚](#library-management-system-)
-  - [Video Demo](#video-demo)
 - [Index ✏️](#index-️)
-- [Features Of LCMS 🚀](#features-of-lcms-)
+- [Features of LCMS 🚀](#features-of-lcms-)
 - [Setup 🔥](#setup-)
   - [Frontend Setup 🍧](#frontend-setup-)
   - [Backend Setup 🍿](#backend-setup-)
-- [Technologies 🛠](#technologies-)
-- [Screenshots](#screenshots)
-- [References 💻](#references-)
+- [Dockerization 🐳](#dockerization-)
+  - [Dockerize Frontend](#dockerize-frontend)
+  - [Dockerize Backend](#dockerize-backend)
+  - [Docker Compose for Full Application](#docker-compose-for-full-application)
+- [Deployment Instructions 🚀](#deployment-instructions-🚀-)
+- [Technologies Used 🛠](#technologies-used-)
+- [Screenshots](#Screenshots-)
 - [Author 📝](#author-)
 - [Connect Me On 🌍](#connect-me-on-)
-- [License 🏆](#license-)
+- [Key Features of Technology Used 🏆](#Key-Features)
+
+---
 
 ## Features Of LCMS 🚀
 
@@ -29,6 +34,8 @@ A full-stack web application built on the **MERN Stack** (MongoDB, Express, Reac
 - Issue and Return Transaction tracking of a Book by the Member
 - Reserving a book for specific dates
 - Showing the Achievements, Event Gallery
+
+--- 
 
 ## Setup 🔥
 
@@ -60,6 +67,168 @@ A full-stack web application built on the **MERN Stack** (MongoDB, Express, Reac
 
 5. Run `nodemon server.js` to start the server [Should have installed nodemon globally]
 
+
+--- 
+
+## Dockerization 🐳
+
+#### Dockerize Frontend
+Build and run the image:
+
+    
+        docker build -t library-management-frontend ./frontend
+        docker run -d -p 3000:3000 library-management-frontend
+
+#### Dockerize backend
+Build and run the image:
+
+       
+          docker build -t library-management-backend ./backend
+          docker run -d -p 5000:5000 library-management-backend
+
+
+### Docker Compose for Full Application
+
+Run the application using Docker Compose:
+
+          docker-compose up --build
+
+---
+---
+
+# Deployment Instructions 🚀
+### Step 1: Setup Jenkins for CI/CD
+
+1. **Create a Jenkins job to build the application:**
+   - Go to Jenkins dashboard and create a new pipeline job.
+   - In the pipeline configuration, set up the pipeline script (or use `Jenkinsfile` if you have it in your repository).
+   - Add a build step to pull the code from the GitHub repository and build the Docker images for both frontend and backend.
+
+2. **Pipeline Script for Jenkins:**
+   ```groovy
+   pipeline {
+     agent any
+     stages {
+       stage('Checkout Code') {
+         steps {
+           git 'https://github.com/Reeteshrajesh/library-management-system.git'
+         }
+       }
+       stage('Build Docker Images') {
+         steps {
+           script {
+             // Build frontend Docker image
+             sh 'docker build -t library-management-frontend ./frontend'
+             // Build backend Docker image
+             sh 'docker build -t library-management-backend ./backend'
+           }
+         }
+       }
+       stage('Test Docker Containers') {
+         steps {
+           script {
+             // Add your test commands here to validate Docker containers (e.g., health checks)
+             sh 'docker run --rm library-management-frontend test'
+             sh 'docker run --rm library-management-backend test'
+           }
+         }
+       }
+     }
+   }
+
+
+### Step 2: Vulnerability Scanning
+
+
+To ensure the security of your Docker images, it's important to perform vulnerability scanning. Trivy is a fast and simple vulnerability scanner for Docker images. In this step, we'll install Trivy and integrate it into a Jenkins pipeline to scan your Docker images for vulnerabilities before deployment. If any **high** vulnerabilities are found, the deployment will be blocked.
+
+
+#### Install Trivy for Docker image scanning:
+
+1. **For macOS (using Homebrew):**
+   ```bash
+   brew install trivy
+   
+2. **Alternatively, you can use Docker to install Trivy in a container:**
+   ```bash
+    docker pull aquasec/trivy
+
+3. **Create a Jenkins job to block deployment if high vulnerabilities are found:**
+
+    - Set up a Jenkins job to run Trivy to scan the Docker images.
+    - Configure the Jenkins pipeline to use Trivy for scanning the frontend and backend images   for vulnerabilities before deployment. If any high vulnerabilities are found, stop the deployment.
+
+
+4.**Pipeline Script for Jenkins (Vulnerability Scanning):**
+
+
+      
+      pipeline {
+        agent any
+        stages {
+          stage('Scan Docker Images for Vulnerabilities') {
+            steps {
+              script {
+                // Scan the frontend image
+                sh 'trivy image library-management-frontend:latest'
+                // Scan the backend image
+                sh 'trivy image library-management-backend:latest'
+              }
+            }
+          }
+          stage('Deploy') {
+            steps {
+              script {
+                // Deploy only if no high vulnerabilities are found
+                // Add logic to check the Trivy report and proceed accordingly
+                echo 'Deploying application to Kubernetes...'
+              }
+            }
+          }
+        }
+      }
+
+
+
+### Step 3: Deploy with Kubernetes and ArgoCD
+
+#### Create a Kubernetes deployment file(deployment.yaml):
+
+
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: library-management
+    spec:
+      replicas: 2
+      selector:
+        matchLabels:
+          app: library-management
+      template:
+        metadata:
+          labels:
+            app: library-management
+        spec:
+          containers:
+            - name: frontend
+              image: library-management-frontend:latest
+              ports:
+                - containerPort: 3000
+            - name: backend
+              image: library-management-backend:latest
+              ports:
+                - containerPort: 5000
+
+    
+
+
+#### Deploy using ArgoCD connected to your Kubernetes cluster.
+  - Install ArgoCD and link it to your Kubernetes cluster.
+  - In ArgoCD, create an application that connects to the Git repository where your Kubernetes configuration is stored.
+  - Use ArgoCD to sync and deploy the library-management application to your Kubernetes cluster.
+
+ ---
+
 ## Technologies Used 🛠
 
 - **Frontend**: React.js (Hooks), Yarn
@@ -81,14 +250,11 @@ A full-stack web application built on the **MERN Stack** (MongoDB, Express, Reac
 ![7](https://user-images.githubusercontent.com/73348574/205631804-6c631b5e-8bcd-41c4-bb73-bab6ea8b78f7.png)
 ![8](https://user-images.githubusercontent.com/73348574/205631977-f393ca09-aa24-42a5-9bd7-d92d471c514c.png)
 
-## References 💻
-
-- [NodeJs Documentation](https://nodejs.org/en/docs/)
-- [React Documentation](https://reactjs.org/docs/getting-started.html)
+---
 
 ## Author 📝
 
-- [@iampranavdhar](https://www.github.com/iampranavdhar)
+- [@Reeteshrajesh]((https://github.com/Reeteshrajesh))
 
 ## Connect Me On 🌍
 
