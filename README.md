@@ -1,13 +1,8 @@
 ## Library Management System 📚
 
-A web app for managing all the activities of a library like managing members and book transactions, built on MERN Stack
+A full-stack web application built on the **MERN Stack** (MongoDB, Express, React, and Node.js) for managing library activities such as adding books, managing members, issuing and returning books, and more.
 ![1](https://user-images.githubusercontent.com/73348574/205624307-6a1b18fa-5ef7-4de9-b141-9225eca62c6c.png)
 
-### Video Demo
-
-[Demo Link](https://drive.google.com/file/d/1gddUdOE41WaEyY4OWoJtDa0l6VJZTg94/view?usp=sharing)
-
-Show some ❤️ and 🌟 the repo to support the project
 
 ## Index ✏️
 
@@ -65,12 +60,15 @@ Show some ❤️ and 🌟 the repo to support the project
 
 5. Run `nodemon server.js` to start the server [Should have installed nodemon globally]
 
-## Technologies 🛠
+## Technologies Used 🛠
 
-- ReactJS[Hooks]
-- NodeJs
-- ExpressJs
-- MongoDB
+- **Frontend**: React.js (Hooks), Yarn
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB
+- **Deployment**: AWS EC2, Docker, Jenkins, ArgoCD, Kubernetes
+- **CI/CD**: Jenkins, Trivy for Vulnerability Scanning
+
+---
 
 ## Screenshots
 
@@ -94,9 +92,14 @@ Show some ❤️ and 🌟 the repo to support the project
 
 ## Connect Me On 🌍
 
-[![twitter badge](https://img.shields.io/badge/twitter-Pranavdhar-0077b5?style=social&logo=twitter)](https://twitter.com/iampranavdhar)<br/>
-[![linkedin badge](https://img.shields.io/badge/linkedin-Pranavdhar-0077b5?style=social&logo=linkedin)](https://in.linkedin.com/in/sai-pranavdhar-reddy-nalamalapu-038104206)
+linkedIn :: https://www.linkedin.com/in/reetesh-kumar-850807255/
 
-## License 🏆
+---
 
-This repository is licensed under MIT License. Find [LICENSE](LICENSE) to know more
+### Key Features:
+- **Setup and Deployment**: Comprehensive steps for local development and deploying to AWS EC2 using Docker, Jenkins, and Kubernetes.
+- **Dockerization**: Separate Dockerfiles for frontend and backend, with a Docker Compose option.
+- **CI/CD Workflow**: Integrated instructions for Jenkins and Trivy.
+- **ArgoCD Deployment**: Easy configuration for Kubernetes.
+
+
